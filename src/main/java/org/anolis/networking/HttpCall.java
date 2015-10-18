@@ -17,7 +17,7 @@ import java.util.HashMap;
 /**
  * Created by Quixotical on 10/18/15.
  */
-public class HttpCall extends AsyncTask<Void, Void, Void>{
+public class HttpCall extends AsyncTask<Void, Void, Boolean>{
     /**
      * The int that represents a GET request.
      */
@@ -92,8 +92,9 @@ public class HttpCall extends AsyncTask<Void, Void, Void>{
      * @param params the params that are required to run this call
      */
     @Override
-    protected final Void doInBackground(Void... params)
+    protected final Boolean doInBackground(Void... params)
     {
+        String response = null;
         String requestData = this.getRequestData(this.getParams());
 
         if(this.mMethod.equals(HttpCall.REQUEST_METHOD_GET)) {
@@ -125,7 +126,9 @@ public class HttpCall extends AsyncTask<Void, Void, Void>{
                     wr.close();
                 }
 
-                String response = "";
+                connection.connect();
+
+                response = "";
                 BufferedReader in;
                 if (connection.getResponseCode() == 200) {
                     in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -144,7 +147,6 @@ public class HttpCall extends AsyncTask<Void, Void, Void>{
 
                     this.handleBackgroundSuccess(obj);
 
-                    return null;
                 }
                 catch(JSONException e) {
                     Log.e("baseCall", e.getMessage(), e);
@@ -159,7 +161,7 @@ public class HttpCall extends AsyncTask<Void, Void, Void>{
         catch(IOException e) {
             Log.e("baseCall", e.getMessage(), e);
         }
-        return null;
+        return response != null;
 
     }
 
