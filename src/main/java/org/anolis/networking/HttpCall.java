@@ -3,6 +3,7 @@ package org.anolis.networking;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.anolis.networking.response.ResponseHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,15 +48,20 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
      */
     private String mAuthentication;
     /**
+     * ResponseHandler = the response handler
+     */
+    private ResponseHandler mResponseHandler;
+    /**
      * Constructs
      * @param method
      * @param url
      */
-    protected HttpCall(String url, String method)
+    protected HttpCall(String url, String method, ResponseHandler responseHandler)
     {
         super();
         this.mMethod = method;
         this.mUrl = url;
+        this.mResponseHandler = responseHandler;
     }
     public void setAuthenticaion(String type, String value){
 
@@ -155,8 +161,6 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
             finally {
                 connection.disconnect();
             }
-
-
         }
         catch(IOException e) {
             Log.e("baseCall", e.getMessage(), e);
@@ -167,23 +171,14 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
 
     protected void handleBackgroundSuccess(JSONObject data){}
 
-    public void onPostExecute(JSONObject responseData)
+    @Override
+    public void onPostExecute(Boolean responseData)
     {
-        //TODO replace with generic listener
-//        if(responseData == null)
-//        {
-//            MyActivity.currentInstance.onAPIDisconnect();
-//        }
-//        else
-//        {
-//            //Here we check to ensure the status code has two numbers before ending in 0-10 (i.e. 1110, 1109, 2307)
-//            Pattern pattern = Pattern.compile("^[1-9][0-9]+(0[0-9]|10)$");
-//            Matcher matcher = pattern.matcher("" + responseData.optInt(Response.RESPONSE_STATUS));
-//            if(matcher.matches())
-//                MyActivity.currentInstance.onAPISuccess(responseData);
-//            else
-//                MyActivity.currentInstance.onAPIError(responseData);
-//        }
+        if(responseData){
+            mResponseHandler.onConnectionSuccess();
+        }
+        else {
+            mResponseHandler.onConnectionFailure();
+        }
     }
-
 }
