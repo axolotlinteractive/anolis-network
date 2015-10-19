@@ -8,5 +8,12 @@ public interface RequestFormat {
 	 * 
 	 * @return String the http read request body
 	 */
-	public String getRequestBody();
+	String getRequestBody();
+
+	/**
+	 * This must be override in order to set a content type into the request
+	 *
+	 * @return String the content type this request format takes
+	 */
+	String getContentType();
 }
