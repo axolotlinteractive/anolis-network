@@ -147,7 +147,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
                     response += line;
                 }
                 in.close();
-                mResponseHandler.responseParser(response);
+                mResponseHandler.parseResponse(response);
             }
             finally {
                 connection.disconnect();

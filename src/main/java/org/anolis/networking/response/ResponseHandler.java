@@ -19,5 +19,5 @@ public interface ResponseHandler {
     /**
      * method that will parse the data we get back from the server
      */
-    void responseParser(String response);
+    void parseResponse(String response);
 }
