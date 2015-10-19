@@ -147,16 +147,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
                     response += line;
                 }
                 in.close();
-
-                try {
-                    JSONObject obj = new JSONObject(response);
-
-                    this.handleBackgroundSuccess(obj);
-
-                }
-                catch(JSONException e) {
-                    Log.e("baseCall", e.getMessage(), e);
-                }
+                mResponseHandler.responseParser(response);
             }
             finally {
                 connection.disconnect();
@@ -168,8 +159,6 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
         return response != null;
 
     }
-
-    protected void handleBackgroundSuccess(JSONObject data){}
 
     @Override
     public void onPostExecute(Boolean responseData)
