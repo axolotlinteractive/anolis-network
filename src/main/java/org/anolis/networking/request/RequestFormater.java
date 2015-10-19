@@ -1,6 +1,6 @@
 package org.anolis.networking.request;
 
-public interface RequestFormat {
+public interface RequestFormater {
 
 	/**
 	 * This must be overriden in order to create a request body 
