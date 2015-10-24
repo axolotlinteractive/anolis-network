@@ -1,6 +1,6 @@
 package org.anolis.networking.request;
 
-public interface RequestFormat {
+public abstract class RequestFormat {
 
 	/**
 	 * This must be overriden in order to create a request body 
@@ -16,4 +16,11 @@ public interface RequestFormat {
 	 * @return String the content type this request format takes
 	 */
 	String getContentType();
+
+	/**
+	 * This must be override in order to get any relevant url query that needs to be attached to the requested URL
+	 *
+	 * @return String the query url
+	 */
+	String getURLQuery();
 }
