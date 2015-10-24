@@ -13,12 +13,19 @@ public abstract class JSONResponseHandler implements ResponseHandler{
      * JSONObject JSONResponse = the converted parseResponse String stored as a JSONObject
      */
     private JSONObject JSONResponse;
+    private JSONException JSONError;
 
     public abstract void onResponseSuccess(JSONObject response);
 
+    public abstract void onResponseFailure(JSONException responseException);
+
     @Override
     public void onConnectionSuccess() {
-        responseData(JSONResponse);
+        if(JSONError == null) {
+            onResponseSuccess(JSONResponse);
+        }else{
+            onResponseFailure(JSONError);
+        }
     }
 
     @Override
@@ -27,6 +34,7 @@ public abstract class JSONResponseHandler implements ResponseHandler{
             JSONResponse = new JSONObject(response);
         }catch(JSONException e){
             Log.e("JSONResponseHandler", e.getMessage());
+            JSONError = e;
         }
     }
 }

@@ -8,19 +8,19 @@ public abstract class RequestFormat {
 	 * 
 	 * @return String the http read request body
 	 */
-	String getRequestBody();
+	abstract String getRequestBody();
 
 	/**
 	 * This must be override in order to set a content type into the request
 	 *
 	 * @return String the content type this request format takes
 	 */
-	String getContentType();
+	abstract String getContentType();
 
 	/**
 	 * This must be override in order to get any relevant url query that needs to be attached to the requested URL
 	 *
 	 * @return String the query url
 	 */
-	String getURLQuery();
+	abstract String getURLQuery();
 }
