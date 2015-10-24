@@ -13,10 +13,6 @@ public interface ResponseHandler {
      */
     void onConnectionFailure();
     /**
-     * method that will parse the response
-     */
-    void responseHandler();
-    /**
      * method that will parse the data we get back from the server
      */
     void parseResponse(String response);

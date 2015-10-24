@@ -4,21 +4,21 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.anolis.networking.response.ResponseHandler;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import java.util.HashMap;
 
 /**
  * Created by Quixotical on 10/18/15.
  */
-public class HttpCall extends AsyncTask<Void, Void, Boolean>{
+public class HTTPCall extends AsyncTask<Void, Void, Boolean>{
     /**
      * The int that represents a GET request.
      */
@@ -56,7 +56,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
      * @param method
      * @param url
      */
-    protected HttpCall(String url, String method, ResponseHandler responseHandler)
+    protected HTTPCall(String url, String method, ResponseHandler responseHandler)
     {
         super();
         this.mMethod = method;
@@ -103,7 +103,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
         String response = null;
         String requestData = this.getRequestData(this.getParams());
 
-        if(this.mMethod.equals(HttpCall.REQUEST_METHOD_GET)) {
+        if(this.mMethod.equals(HTTPCall.REQUEST_METHOD_GET)) {
             mUrl += "?" + requestData;
         }
 
@@ -119,7 +119,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
                 connection.setRequestProperty("Authorization", mAuthentication);
                 connection.setRequestProperty("Accept-Charset", "UTF-8");
 
-                if (!this.mMethod.equals(HttpCall.REQUEST_METHOD_GET)) {
+                if (!this.mMethod.equals(HTTPCall.REQUEST_METHOD_GET)) {
                     connection.setDoOutput(true);
 
                     connection.setFixedLengthStreamingMode(requestData.length());
@@ -154,7 +154,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
             }
         }
         catch(IOException e) {
-            Log.e("baseCall", e.getMessage(), e);
+            Log.e("HTTPCall", e.getMessage(), e);
         }
         return response != null;
 
