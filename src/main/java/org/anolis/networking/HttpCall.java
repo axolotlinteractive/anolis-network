@@ -18,7 +18,7 @@ import java.util.HashMap;
 /**
  * Created by Quixotical on 10/18/15.
  */
-public class HTTPCall extends AsyncTask<Void, Void, Boolean>{
+public class HttpCall extends AsyncTask<Void, Void, Boolean>{
     /**
      * The int that represents a GET request.
      */
@@ -56,7 +56,7 @@ public class HTTPCall extends AsyncTask<Void, Void, Boolean>{
      * @param method
      * @param url
      */
-    protected HTTPCall(String url, String method, ResponseHandler responseHandler)
+    protected HttpCall(String url, String method, ResponseHandler responseHandler)
     {
         super();
         this.mMethod = method;
@@ -103,7 +103,7 @@ public class HTTPCall extends AsyncTask<Void, Void, Boolean>{
         String response = null;
         String requestData = this.getRequestData(this.getParams());
 
-        if(this.mMethod.equals(HTTPCall.REQUEST_METHOD_GET)) {
+        if(this.mMethod.equals(HttpCall.REQUEST_METHOD_GET)) {
             mUrl += "?" + requestData;
         }
 
@@ -119,7 +119,7 @@ public class HTTPCall extends AsyncTask<Void, Void, Boolean>{
                 connection.setRequestProperty("Authorization", mAuthentication);
                 connection.setRequestProperty("Accept-Charset", "UTF-8");
 
-                if (!this.mMethod.equals(HTTPCall.REQUEST_METHOD_GET)) {
+                if (!this.mMethod.equals(HttpCall.REQUEST_METHOD_GET)) {
                     connection.setDoOutput(true);
 
                     connection.setFixedLengthStreamingMode(requestData.length());
