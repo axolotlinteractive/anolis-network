@@ -7,14 +7,14 @@ import java.util.HashMap;
  *
  * Class used to send HTML form requests
  */
-public class FormEncodedRequestFormat extends RequestFormat {
+public class FormEncodedRequest extends RequestFormat {
     /**
      * Default constructor
      *
      * @param method      The method for this call
      * @param url         The url for this call
      */
-    public FormEncodedRequestFormat(String method, String url) {
+    public FormEncodedRequest(String method, String url) {
         super(method, url,  "application/x-www-form-urlencoded");
     }
 

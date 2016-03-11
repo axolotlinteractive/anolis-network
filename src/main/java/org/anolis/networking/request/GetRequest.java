@@ -7,7 +7,7 @@ import java.util.HashMap;
  *
  * Used for sending get requests
  */
-public class GetRequestFormat extends RequestFormat {
+public class GetRequest extends RequestFormat {
 
 
     /**
@@ -15,7 +15,7 @@ public class GetRequestFormat extends RequestFormat {
      *
      * @param url         The url for this call
      */
-    public GetRequestFormat(String url) {
+    public GetRequest(String url) {
         super(RequestFormat.METHOD_GET, url, null);
     }
 
