@@ -24,6 +24,11 @@ import java.util.HashMap;
 public class HttpCall extends AsyncTask<Void, Void, Boolean>{
 
     /**
+     * list of default headers the entire app will use
+     */
+    private static HashMap<String, String> defaultHeaders = new HashMap<>();
+
+    /**
      * The request format for this call
      */
     private final RequestFormat requestFormat;
@@ -32,6 +37,10 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
      * The response handler for this call
      */
     private final ResponseHandler responseHandler;
+
+    public static void addDefaultHeader(String key, String value) {
+        HttpCall.defaultHeaders.put(key, value);
+    }
 
     /**
      * Constructs
@@ -68,6 +77,9 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
                 connection.setRequestProperty("Accept-Charset", "UTF-8");
                 if (contentType != null) {
                     connection.setRequestProperty("Content-Type", contentType);
+                }
+                for( HashMap.Entry<String, String> entry : HttpCall.defaultHeaders.entrySet()) {
+                    connection.setRequestProperty(entry.getKey(), entry.getValue());
                 }
                 for( HashMap.Entry<String, String> entry : this.requestFormat.getHeaders().entrySet()) {
                     connection.setRequestProperty(entry.getKey(), entry.getValue());
