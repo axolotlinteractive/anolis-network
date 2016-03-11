@@ -32,7 +32,7 @@ public abstract class RequestFormat {
 	/**
 	 * The url for this request
 	 */
-	private String url;
+	protected String url;
 
 	/**
 	 * The content type of the request
