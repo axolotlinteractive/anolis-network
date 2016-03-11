@@ -3,6 +3,7 @@ package org.anolis.networking;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.anolis.networking.request.RequestFormat;
 import org.anolis.networking.response.ResponseHandler;
 
 import java.io.BufferedReader;
@@ -17,79 +18,30 @@ import java.util.HashMap;
 
 /**
  * Created by Quixotical on 10/18/15.
+ *
+ * Class for running http calls
  */
 public class HttpCall extends AsyncTask<Void, Void, Boolean>{
+
     /**
-     * The int that represents a GET request.
+     * The request format for this call
      */
-    protected static final String REQUEST_METHOD_GET = "GET";
+    private final RequestFormat requestFormat;
+
     /**
-     * The int that represents a POST request.
+     * The response handler for this call
      */
-    protected static final String REQUEST_METHOD_POST = "POST";
-    /**
-     * The int that represents a PUT request.
-     */
-    protected static final String REQUEST_METHOD_PUT = "PUT";
-    /**
-     * The int that represents a DELETE request.
-     */
-    protected static final String REQUEST_METHOD_DELETE = "DELETE";
-    /**
-     * int = method
-     */
-    private String mMethod;
-    /**
-     * String = url path
-     */
-    private String mUrl;
-    /**
-     * String = authentication
-     */
-    private String mAuthentication;
-    /**
-     * ResponseHandler = the response handler
-     */
-    private ResponseHandler mResponseHandler;
+    private final ResponseHandler responseHandler;
+
     /**
      * Constructs
-     * @param method
-     * @param url
+     * @param request RequestFormat
      */
-    protected HttpCall(String url, String method, ResponseHandler responseHandler)
-    {
+    protected HttpCall(RequestFormat request, ResponseHandler responseHandler) {
         super();
-        this.mMethod = method;
-        this.mUrl = url;
-        this.mResponseHandler = responseHandler;
-    }
-    public void setAuthenticaion(String type, String value){
 
-        this.mAuthentication = type.concat(value);
-    }
-    /**
-     * Retrieves a list of parameters and returns it
-     * @return ArrayList
-     */
-    protected HashMap<String, String> getParams(){ return new HashMap<>(); }
-
-    /**
-     * creates a url encoded string of available parameters
-     * @param params HashMap all parameters that need to be encoded
-     * @return String url encoded string
-     */
-    private String getRequestData(HashMap<String, String> params) {
-
-        String data = "";
-
-        for( HashMap.Entry<String, String> entry : params.entrySet()) {
-            data+= entry.getKey() + "=" + entry.getValue() + "&";
-        }
-
-        if (data.length() > 0)
-            data = data.substring(0, data.length() - 1);
-
-        return data;
+        this.requestFormat = request;
+        this.responseHandler = responseHandler;
     }
 
     /**
@@ -101,30 +53,27 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
     protected final Boolean doInBackground(Void... params)
     {
         String response = null;
-        String requestData = this.getRequestData(this.getParams());
-
-        if(this.mMethod.equals(HttpCall.REQUEST_METHOD_GET)) {
-            mUrl += "?" + requestData;
-        }
+        String requestData = this.requestFormat.getRequestBody();
 
         try {
-            URL url = new URL(mUrl);
+            URL url = new URL(this.requestFormat.getURL());
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             try {
 
-                connection.setRequestMethod(this.mMethod);
-                //TODO make authentication generic
-                connection.setRequestProperty("Authorization", mAuthentication);
-                connection.setRequestProperty("Accept-Charset", "UTF-8");
+                connection.setRequestMethod(this.requestFormat.getMethod());
 
-                if (!this.mMethod.equals(HttpCall.REQUEST_METHOD_GET)) {
+                connection.setRequestProperty("Accept-Charset", "UTF-8");
+                connection.setRequestProperty("Content-Type", this.requestFormat.getContentType());
+                for( HashMap.Entry<String, String> entry : this.requestFormat.getHeaders().entrySet()) {
+                    connection.setRequestProperty(entry.getKey(), entry.getValue());
+                }
+
+                if (requestData != null) {
                     connection.setDoOutput(true);
 
                     connection.setFixedLengthStreamingMode(requestData.length());
-
-                    connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
                     DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                     wr.writeBytes(requestData);
@@ -147,7 +96,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
                     response += line;
                 }
                 in.close();
-                mResponseHandler.parseResponse(response);
+                this.responseHandler.parseResponse(response);
             }
             finally {
                 connection.disconnect();
@@ -161,13 +110,13 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
     }
 
     @Override
-    public void onPostExecute(Boolean responseData)
+    public void onPostExecute(Boolean success)
     {
-        if(responseData){
-            mResponseHandler.onConnectionSuccess();
+        if(success){
+            this.responseHandler.onConnectionSuccess();
         }
         else {
-            mResponseHandler.onConnectionFailure();
+            this.responseHandler.onConnectionFailure();
         }
     }
 }
