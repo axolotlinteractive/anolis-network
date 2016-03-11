@@ -35,6 +35,11 @@ public abstract class RequestFormat {
 	private String url;
 
 	/**
+	 * The content type of the request
+	 */
+	private String contentType;
+
+	/**
 	 * The headers the user has specified
 	 */
 	private HashMap<String, String> headers = new HashMap<>();
@@ -43,6 +48,18 @@ public abstract class RequestFormat {
 	 * The data for this request
 	 */
 	protected HashMap<String, Object> requestVariables = new HashMap<>();
+
+	/**
+	 * Default constructor
+	 * @param method The method for this call
+	 * @param url The url for this call
+	 * @param contentType The content type encoding
+	 */
+	public RequestFormat(String method, String url, String contentType) {
+		this.method = method;
+		this.url = url;
+		this.contentType = contentType;
+	}
 
 	/**
 	 * Adds a new request variable to the call
@@ -78,6 +95,13 @@ public abstract class RequestFormat {
 	}
 
 	/**
+	 * @return String the content type this request format takes
+	 */
+	public String getContentType() {
+		return this.contentType;
+	}
+
+	/**
 	 *
 	 * @return the headers for this call
 	 */
@@ -92,11 +116,4 @@ public abstract class RequestFormat {
 	 * @return String the http read request body or null if there is none
 	 */
 	public abstract String getRequestBody();
-
-	/**
-	 * This must be override in order to set a content type into the request
-	 *
-	 * @return String the content type this request format takes
-	 */
-	public abstract String getContentType();
 }
