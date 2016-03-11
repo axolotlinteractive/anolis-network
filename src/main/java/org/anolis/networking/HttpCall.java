@@ -37,7 +37,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
      * Constructs
      * @param request RequestFormat
      */
-    protected HttpCall(RequestFormat request, ResponseHandler responseHandler) {
+    public HttpCall(RequestFormat request, ResponseHandler responseHandler) {
         super();
 
         this.requestFormat = request;
