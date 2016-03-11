@@ -54,6 +54,7 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
     {
         String response = null;
         String requestData = this.requestFormat.getRequestBody();
+        String contentType = this.requestFormat.getContentType();
 
         try {
             URL url = new URL(this.requestFormat.getURL());
@@ -65,7 +66,9 @@ public class HttpCall extends AsyncTask<Void, Void, Boolean>{
                 connection.setRequestMethod(this.requestFormat.getMethod());
 
                 connection.setRequestProperty("Accept-Charset", "UTF-8");
-                connection.setRequestProperty("Content-Type", this.requestFormat.getContentType());
+                if (contentType != null) {
+                    connection.setRequestProperty("Content-Type", contentType);
+                }
                 for( HashMap.Entry<String, String> entry : this.requestFormat.getHeaders().entrySet()) {
                     connection.setRequestProperty(entry.getKey(), entry.getValue());
                 }
